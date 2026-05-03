@@ -73,10 +73,10 @@ export default function Footer() {
         {/* Contact */}
         <address className={styles.contact}>
           <h3 className={styles.heading}>Contact Us</h3>
-          <a href="tel:+91 1234567890" className={styles.contactLink}>
+          <a href="tel:+91 95512 31430" className={styles.contactLink}>
             <span aria-hidden="true">📞</span> +91 95512 31430
           </a>
-          <a href="mailto:hello@asmira.com" className={styles.contactLink}>
+          <a href="mailto:asmirawellness@gmail.com" className={styles.contactLink}>
             <span aria-hidden="true">✉</span> asmirawellness@gmail.com
           </a>
           <p className={styles.address}>

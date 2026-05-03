@@ -103,8 +103,8 @@ export default function Navbar() {
         </ul>
 
         <div className={styles.mobileContact}>
-          <a href="tel:+11234567890">📞 +1 (123) 456-7890</a>
-          <a href="mailto:hello@asmira.com">✉ hello@asmira.com</a>
+          <a href="tel:+91 95512 31430">📞 +91 95512 31430</a>
+          <a href="mailto:asmirawellness.com">✉ asmirawellness@gmail.com</a>
         </div>
       </div>
     </header>
