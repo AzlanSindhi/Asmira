@@ -1,0 +1,250 @@
+/* Services.module.css */
+
+/* Hero */
+.hero {
+  position: relative;
+  padding-top: clamp(8rem, 15vh, 11rem);
+  padding-bottom: clamp(4rem, 8vh, 6rem);
+  overflow: hidden;
+}
+.heroBg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(235,131,23,0.09) 0%, transparent 55%);
+  pointer-events: none; z-index: 0;
+}
+.heroContent { position: relative; z-index: 1; max-width: 660px; }
+.heroTitle {
+  font-family: var(--ff-display);
+  font-size: clamp(2.6rem, 6vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  margin-block: 0.6rem 1.25rem;
+}
+.heroTitle em { color: var(--amber); font-style: italic; }
+.heroSub { font-size: clamp(1rem, 1.7vw, 1.1rem); opacity: 0.68; line-height: 1.75; max-width: 540px; }
+
+/* Overview strip */
+.overview { padding-block: 3.5rem; background: var(--white); border-bottom: 1px solid rgba(16,55,92,0.07); }
+.overviewGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.overviewCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.75rem;
+  background: var(--cream);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(16,55,92,0.07);
+  transition: transform 0.3s var(--ease-out);
+}
+.overviewCard:hover { transform: translateY(-3px); }
+.overviewIcon { font-size: 1.75rem; flex-shrink: 0; }
+.overviewTitle {
+  font-family: var(--ff-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.overviewCount {
+  font-family: var(--ff-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--amber);
+  background: rgba(235,131,23,0.1);
+  padding: 0.15rem 0.55rem;
+  border-radius: 50px;
+}
+.overviewDesc { font-size: 0.855rem; opacity: 0.6; line-height: 1.6; }
+
+/* Main services section */
+.main { padding-block: 4rem 6rem; }
+
+/* Filters */
+.filters { margin-bottom: 2.5rem; }
+.filterList { list-style: none; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filterBtn {
+  padding: 0.55rem 1.35rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--navy);
+  border: 1.5px solid rgba(16,55,92,0.15);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.filterBtn:hover { background: var(--navy-10); border-color: var(--navy); }
+.filterActive { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+.filterActive:hover { background: var(--amber); border-color: var(--amber); }
+
+/* Services grid */
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.serviceCard {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(16,55,92,0.08);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s, border-color 0.3s;
+}
+.serviceCard:hover { transform: translateY(-5px); box-shadow: 0 14px 44px rgba(16,55,92,0.09); border-color: rgba(235,131,23,0.25); }
+
+.cardTop { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.cardIcon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.cardCat {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.cardTitle {
+  font-family: var(--ff-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+.cardDesc { font-size: 0.86rem; opacity: 0.65; line-height: 1.7; flex: 1; margin-bottom: 1.25rem; }
+.cardMeta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.metaItem { font-size: 0.78rem; opacity: 0.55; font-weight: 500; }
+.cardBtn {
+  display: block;
+  padding: 0.65rem 1rem;
+  background: var(--cream);
+  color: var(--navy);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1.5px solid rgba(16,55,92,0.12);
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.cardBtn:hover { background: var(--amber); color: var(--white); border-color: var(--amber); }
+
+/* Insurance */
+.insurance { padding-block: 5.5rem; background: var(--cream); }
+.insuranceInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.insuranceTitle {
+  font-family: var(--ff-display);
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--navy);
+  margin-block: 0.5rem 1.25rem;
+}
+.insuranceTitle em { color: var(--amber); font-style: italic; }
+.insuranceText p { opacity: 0.68; line-height: 1.8; margin-bottom: 1.5rem; }
+.insuranceLink {
+  font-weight: 600;
+  color: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.insuranceLink:hover { color: var(--amber); }
+
+.insurerList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.insurerBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(16,55,92,0.08);
+  font-size: 0.845rem;
+  font-weight: 500;
+  color: var(--navy);
+  transition: border-color 0.2s;
+}
+.insurerBadge:hover { border-color: var(--gold); }
+.insurerBadge span { color: var(--gold); font-size: 0.6rem; flex-shrink: 0; }
+
+/* CTA */
+.cta { padding-block: 5rem; background: var(--navy); }
+.ctaInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.ctaTitle {
+  font-family: var(--ff-display);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+}
+.cta p { color: rgba(244,246,255,0.55); font-size: 0.95rem; }
+.ctaBtns { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.ctaBtn {
+  padding: 0.9rem 2.25rem;
+  background: var(--amber);
+  color: var(--white);
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 6px 22px rgba(235,131,23,0.35);
+}
+.ctaBtn:hover { background: var(--gold); color: var(--navy); transform: translateY(-2px); }
+.ctaPhone {
+  padding: 0.9rem 1.75rem;
+  border: 1.5px solid rgba(244,246,255,0.2);
+  color: var(--cream);
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.925rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.ctaPhone:hover { border-color: var(--gold); background: rgba(243,198,35,0.08); }
+
+@media (max-width: 900px) {
+  .overviewGrid     { grid-template-columns: 1fr; }
+  .insuranceInner   { grid-template-columns: 1fr; gap: 2.5rem; }
+  .ctaInner         { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .insurerList { grid-template-columns: 1fr; }
+}

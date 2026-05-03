@@ -1,0 +1,89 @@
+/* Footer.module.css */
+.footer { background: var(--navy); color: var(--cream); padding-top: 4.5rem; }
+
+.inner {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1.2fr 1.3fr;
+  gap: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(243,198,35,0.15);
+}
+
+/* Brand */
+.logo { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+.logoIcon { flex-shrink: 0; }
+.logoName {
+  display: block;
+  font-family: var(--ff-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.1;
+}
+.logoSub {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.tagline {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  opacity: 0.6;
+  margin-bottom: 1.25rem;
+  max-width: 250px;
+}
+.hours { display: flex; flex-direction: column; gap: 0.2rem; }
+.hours span { font-size: 0.78rem; opacity: 0.5; }
+
+/* Headings */
+.heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+
+/* Links */
+.list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.footerLink { font-size: 0.875rem; opacity: 0.6; transition: opacity 0.2s, color 0.2s; }
+.footerLink:hover { opacity: 1; color: var(--gold); }
+
+/* Contact */
+.contact { font-style: normal; display: flex; flex-direction: column; gap: 0.6rem; }
+.contactLink {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.875rem; opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
+}
+.contactLink:hover { opacity: 1; color: var(--gold); }
+.address { font-size: 0.8rem; opacity: 0.45; line-height: 1.65; margin-top: 0.25rem; }
+.emergency {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: rgba(235,131,23,0.12);
+  border: 1px solid rgba(235,131,23,0.25);
+  border-radius: 10px;
+}
+.emergency strong { display: block; font-size: 0.78rem; color: var(--gold); margin-bottom: 0.2rem; }
+.emergency a { font-size: 1rem; font-weight: 700; color: var(--amber); }
+
+/* Bottom */
+.bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-block: 1.25rem;
+  font-size: 0.78rem; opacity: 0.4;
+}
+
+@media (max-width: 1024px) {
+  .inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .inner { grid-template-columns: 1fr; gap: 2rem; }
+  .bottom { flex-direction: column; gap: 0.35rem; text-align: center; }
+}
