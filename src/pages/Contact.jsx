@@ -1,67 +1,114 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { sendContactMessage } from '../firebase/services';
+import { sendContactMessage, submitFeedback } from '../firebase/services';
 import styles from './Contact.module.css';
 
 const CONTACT_INFO = [
-  { icon: '📞', label: 'Phone',   value: '+91 95122 31430',          href: 'tel:+91 12345 67890' },
-  { icon: '✉',  label: 'Email',   value: 'asmirawellness@gmail.com',             href: 'asmirawellness@gmail.com' },
-  { icon: '📍', label: 'Address', value: 'Asmira Wellness, 1st Floor, Shop No:118, M Square Mall Tithal Road', href: 'https://maps.google.com' },
-  { icon: '🕐', label: 'Hours',   value: 'Mon–Thur 1am–8pm · Fri 3pm–8pm · Sat 11am–8pm · Sun 9am–2pm', href: null },
+  { icon: '📞', label: 'Phone',   value: '+91 95122 31430',
+    href: 'tel:+919512231430' },
+  { icon: '✉',  label: 'Email',   value: 'asmirawellness@gmail.com',
+    href: 'mailto:asmirawellness@gmail.com' },
+  { icon: '📍', label: 'Address', value: 'Asmira Wellness, 1st Floor, Shop No:118, M Square Mall, Tithal Road, Valsad – 396001',
+    href: 'https://www.google.com/maps/place/Asmira+Wellness/@20.6043025,72.9103001,17z' },
+  { icon: '🕐', label: 'Hours',   value: 'Mon–Thu 1pm–8pm · Fri 3pm–8pm · Sat 11am–8pm · Sun 9am–2pm',
+    href: null },
 ];
 
 const FAQS = [
-  { q: 'Do I need a referral to book an appointment?', a: 'No referral is needed for most services. You can book directly through our website or by phone. Some insurance plans may require a referral — we can help you check.' },
-  { q: 'Are your practitioners fully licensed?', a: 'Yes. All practitioners at Asmira are fully licensed, registered with their respective professional bodies, and carry professional indemnity insurance.' },
-  { q: 'Do you offer telehealth / online appointments?', a: 'Yes — psychological counseling and initial consultations are available via secure video call. Physiotherapy and chiropractic care are in-person only.' },
-  { q: 'How long will I need to be in treatment?', a: 'This varies by condition and individual. Your practitioner will discuss expected timelines during your initial assessment. Many patients see meaningful progress within 4–8 sessions.' },
-  { q: 'What should I bring to my first appointment?', a: 'Please bring a valid photo ID, your insurance card, a list of current medications, and any relevant medical records. Arrive 10 minutes early to complete intake paperwork.' },
-  { q: 'Is my information kept confidential?', a: 'Absolutely. All patient information is protected under HIPAA. We use encrypted systems and maintain strict confidentiality standards across all disciplines.' },
+  { q: 'Do I need a referral to book an appointment?',
+    a: 'No referral is needed. You can book directly through our website, WhatsApp, or phone. We will guide you through the rest.' },
+  { q: 'Is everything I share confidential?',
+    a: 'Yes — completely. Professional confidentiality is the foundation of everything we do at Asmira Wellness. Nothing you share leaves the session.' },
+  { q: 'Do you offer online sessions?',
+    a: 'Yes. All our counselling services are available online via video or voice call — with the same depth and confidentiality as in-person sessions.' },
+  { q: 'What happens in a first session?',
+    a: 'Your first session is a comfortable, no-pressure intake conversation. We get to know you, understand your situation, and together begin building your personalised plan.' },
+  { q: 'How many sessions will I need?',
+    a: 'This varies by individual. Many clients notice meaningful change within 4–8 sessions, though some prefer ongoing support. There is no pressure or fixed commitment.' },
+  { q: 'What are your fees?',
+    a: 'Please contact us directly for current fee information. We believe wellness should be accessible and are happy to discuss options during your first consultation.' },
+];
+
+const SESSION_OPTIONS = [
+  'Individual Therapy',
+  'Couples Counseling',
+  'Career Counseling',
+  'Child & Adolescent Therapy',
+  'Parenting Guidance',
+  'Emotional Wellness Session',
+  'Other',
 ];
 
 export default function Contact() {
-  const [status, setStatus] = useState('idle');
+  const [contactStatus, setContactStatus] = useState('idle');
+  const [feedbackStatus, setFeedbackStatus] = useState('idle');
   const [openFaq, setOpenFaq] = useState(null);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const [rating, setRating] = useState(5);
+  const [hoveredStar, setHoveredStar] = useState(0);
+
+  const {
+    register: registerContact,
+    handleSubmit: handleContact,
+    reset: resetContact,
+    formState: { errors: contactErrors },
+  } = useForm();
+
+  const {
+    register: registerFeedback,
+    handleSubmit: handleFeedback,
+    reset: resetFeedback,
+    formState: { errors: feedbackErrors },
+  } = useForm();
 
   useEffect(() => {
     const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      }),
       { threshold: 0.08 }
     );
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
-  const onSubmit = async (data) => {
-    setStatus('loading');
+  const onContactSubmit = async (data) => {
+    setContactStatus('loading');
     const result = await sendContactMessage(data);
-    if (result.success) { setStatus('success'); reset(); }
-    else { setStatus('error'); }
+    if (result.success) { setContactStatus('success'); resetContact(); }
+    else { setContactStatus('error'); }
+  };
+
+  const onFeedbackSubmit = async (data) => {
+    setFeedbackStatus('loading');
+    const result = await submitFeedback({ ...data, rating });
+    if (result.success) { setFeedbackStatus('success'); resetFeedback(); setRating(5); }
+    else { setFeedbackStatus('error'); }
   };
 
   return (
     <>
       <Helmet>
-        <title>Contact Us — Asmira Wellness Clinic</title>
-        <meta name="description" content="Get in touch with Asmira Wellness Clinic. We're here to answer your questions about psychological counseling, physiotherapy, and chiropractic care." />
+        <title>Contact Us — Asmira Wellness</title>
+        <meta name="description" content="Get in touch with Asmira Wellness. We're here to answer your questions about psychological counselling, emotional wellness, and online sessions." />
         <link rel="canonical" href="https://asmira.com/contact" />
       </Helmet>
 
-      {/* Hero */}
+      {/* ── HERO ── */}
       <section className={styles.hero} aria-label="Contact page hero">
         <div className={`${styles.heroContent} container`}>
           <span className="eyebrow">We're Here for You</span>
-          <h1 className={styles.heroTitle}>Let's start your <em>healing journey</em></h1>
+          <h1 className={styles.heroTitle}>
+            Let's start your <em>healing journey</em>
+          </h1>
           <p className={styles.heroSub}>
-            Questions about services, insurance, or what to expect? Our friendly team reads every message and responds within one business day.
+            Questions about our services, fees, or what to expect? Our team reads every message and responds within one business day.
           </p>
         </div>
         <div className={styles.heroBg} aria-hidden="true" />
       </section>
 
-      {/* Main */}
+      {/* ── MAIN CONTACT AREA ── */}
       <section className={styles.main} aria-labelledby="contact-heading">
         <div className={`${styles.mainInner} container`}>
 
@@ -72,15 +119,18 @@ export default function Contact() {
             </h2>
 
             <ul className={styles.infoList} role="list">
-              {CONTACT_INFO.map(item => (
+              {CONTACT_INFO.map((item) => (
                 <li key={item.label} className={styles.infoItem}>
                   <span className={styles.infoIcon} aria-hidden="true">{item.icon}</span>
                   <div>
                     <span className={styles.infoLabel}>{item.label}</span>
                     {item.href ? (
-                      <a href={item.href} className={styles.infoValue}
-                         target={item.href.startsWith('http') ? '_blank' : undefined}
-                         rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                      <a
+                        href={item.href}
+                        className={styles.infoValue}
+                        target={item.href.startsWith('http') ? '_blank' : undefined}
+                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      >
                         {item.value}
                       </a>
                     ) : (
@@ -91,103 +141,161 @@ export default function Contact() {
               ))}
             </ul>
 
-            {/* Emergency box */}
+            {/* Emergency */}
             <div className={styles.emergency} role="complementary" aria-label="Mental health crisis resources">
               <div className={styles.emergencyIcon} aria-hidden="true">🆘</div>
               <div>
                 <strong>Mental Health Crisis?</strong>
-                <p>If you or someone you know is in crisis, please call or text <a href="tel:14416">14416</a> (Suicide & Crisis Lifeline) or visit your nearest emergency department.</p>
+                <p>
+                  Call <a href="tel:14416">iCall: 9152987821</a> or{' '}
+                  <a href="tel:18602662345">Vandrevala: 1860-2662-345</a> — free, confidential support.
+                </p>
               </div>
             </div>
 
-            {/* Map placeholder */}
-            <div className={styles.mapBox} aria-label="Clinic location illustration">
+            {/* Map */}
+            <div className={styles.mapBox} aria-label="Clinic location">
               <div className={styles.mapIcon} aria-hidden="true">📍</div>
-              <strong>Asmira Wellness, 1st Floor, Shop No-118,M Square Mall, Tithal Road</strong>
-              <span>Valsad, Gujarat 396001</span>
-              <a href="https://www.google.com/maps/place/Asmira+Wellness/@20.6043025,72.9103001,17z/data=!4m14!1m7!3m6!1s0x3be0c3a5e42ae13b:0xbd63b582bb641ad9!2sAsmira+Wellness!8m2!3d20.6043025!4d72.9128804!16s%2Fg%2F11ywzvnrnx!3m5!1s0x3be0c3a5e42ae13b:0xbd63b582bb641ad9!8m2!3d20.6043025!4d72.9128804!16s%2Fg%2F11ywzvnrnx?entry=ttu&g_ep=EgoyMDI2MDQxOS4wIKXMDSoASAFQAw%3D%3D"
-               target="_blank" rel="noopener noreferrer" className={styles.mapLink}>
+              <strong>Asmira Wellness</strong>
+              <span>1st Floor, Shop No:118, M Square Mall</span>
+              <span>Tithal Road, Valsad – 396001</span>
+              <a
+                href="https://www.google.com/maps/place/Asmira+Wellness/@20.6043025,72.9103001,17z"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.mapLink}
+              >
                 Get Directions →
               </a>
             </div>
           </aside>
 
-          {/* Form */}
+          {/* Contact Form */}
           <div className={`${styles.formWrap} reveal`} style={{ transitionDelay: '0.1s' }}>
-            {status === 'success' ? (
+            {contactStatus === 'success' ? (
               <div className={styles.successState} role="alert" aria-live="polite">
                 <div className={styles.successIcon} aria-hidden="true">✦</div>
                 <h3>Message Received!</h3>
-                <p>Thank you for reaching out to Asmira. A member of our team will respond within one business day.</p>
-                <button className={styles.resetBtn} onClick={() => setStatus('idle')}>Send Another Message</button>
+                <p>
+                  Thank you for reaching out to Asmira Wellness. A member of our team will respond within one business day.
+                </p>
+                <button className={styles.resetBtn} onClick={() => setContactStatus('idle')}>
+                  Send Another Message
+                </button>
               </div>
             ) : (
-              <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate aria-label="Contact form">
+              <form
+                className={styles.form}
+                onSubmit={handleContact(onContactSubmit)}
+                noValidate
+                aria-label="Contact form"
+              >
                 <h2 className={styles.formTitle}>Send us a message</h2>
 
-                {status === 'error' && (
+                {contactStatus === 'error' && (
                   <div className={styles.errorBanner} role="alert">
-                    Something went wrong. Please email us directly at asmirawellness@gmail.com or call +91 95122 53430.
+                    Something went wrong. Please email us directly at{' '}
+                    <a href="mailto:asmirawellness@gmail.com">asmirawellness@gmail.com</a> or call{' '}
+                    <a href="tel:+919512231430">+91 95122 31430</a>.
                   </div>
                 )}
 
                 <div className={styles.formRow}>
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="name">Full Name *</label>
-                    <input id="name" className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                      type="text" placeholder="" autoComplete="name"
-                      {...register('name', { required: 'Name is required' })} />
-                    {errors.name && <span className={styles.fieldErr} role="alert">{errors.name.message}</span>}
+                    <input
+                      id="name"
+                      className={`${styles.input} ${contactErrors.name ? styles.inputError : ''}`}
+                      type="text"
+                      autoComplete="name"
+                      {...registerContact('name', { required: 'Name is required' })}
+                    />
+                    {contactErrors.name && (
+                      <span className={styles.fieldErr} role="alert">{contactErrors.name.message}</span>
+                    )}
                   </div>
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="email">Email Address *</label>
-                    <input id="email" className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                      type="email" placeholder="" autoComplete="email"
-                      {...register('email', { required: 'Email is required', pattern: { value: /^\S+@\S+\.\S+$/, message: 'Enter a valid email' } })} />
-                    {errors.email && <span className={styles.fieldErr} role="alert">{errors.email.message}</span>}
+                    <input
+                      id="email"
+                      className={`${styles.input} ${contactErrors.email ? styles.inputError : ''}`}
+                      type="email"
+                      autoComplete="email"
+                      {...registerContact('email', {
+                        required: 'Email is required',
+                        pattern: { value: /^\S+@\S+\.\S+$/, message: 'Enter a valid email' },
+                      })}
+                    />
+                    {contactErrors.email && (
+                      <span className={styles.fieldErr} role="alert">{contactErrors.email.message}</span>
+                    )}
                   </div>
                 </div>
 
                 <div className={styles.field}>
-                  <label className={styles.label} htmlFor="subject">Subject *</label>
-                  <select id="subject" className={`${styles.input} ${errors.subject ? styles.inputError : ''}`}
-                    {...register('subject', { required: 'Please select a subject' })}>
+                  <label className={styles.label} htmlFor="subject">What is this about? *</label>
+                  <select
+                    id="subject"
+                    className={`${styles.input} ${contactErrors.subject ? styles.inputError : ''}`}
+                    {...registerContact('subject', { required: 'Please select a subject' })}
+                  >
                     <option value="">Select a topic</option>
-                    <option value="appointment">Appointment Enquiry</option>
-                    <option value="psychology">Psychological Counseling</option>
-                    <option value="physiotherapy">Physiotherapy</option>
-                    <option value="chiropractic">Chiropractic Care</option>
-                    <option value="insurance">Insurance & Billing</option>
-                    <option value="telehealth">Telehealth Options</option>
-                    <option value="other">General Question</option>
+                    <option value="Appointment Enquiry">Appointment Enquiry</option>
+                    <option value="Psychological Counselling">Psychological Counselling</option>
+                    <option value="Online Sessions">Online Sessions</option>
+                    <option value="Fees & Payment">Fees &amp; Payment</option>
+                    <option value="Workshops & Programs">Workshops &amp; Programs</option>
+                    <option value="General Question">General Question</option>
                   </select>
-                  {errors.subject && <span className={styles.fieldErr} role="alert">{errors.subject.message}</span>}
+                  {contactErrors.subject && (
+                    <span className={styles.fieldErr} role="alert">{contactErrors.subject.message}</span>
+                  )}
                 </div>
 
                 <div className={styles.field}>
-                  <label className={styles.label} htmlFor="phone">Phone Number</label>
-                  <input id="phone" className={styles.input} type="tel"
-                    placeholder="" autoComplete="tel"
-                    {...register('phone')} />
+                  <label className={styles.label} htmlFor="phone">
+                    Phone / WhatsApp <span style={{ fontWeight: 400, opacity: 0.5 }}>(Optional)</span>
+                  </label>
+                  <input
+                    id="phone"
+                    className={styles.input}
+                    type="tel"
+                    autoComplete="tel"
+                    {...registerContact('phone')}
+                  />
                 </div>
 
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="message">Your Message *</label>
-                  <textarea id="message"
-                    className={`${styles.input} ${styles.textarea} ${errors.message ? styles.inputError : ''}`}
+                  <textarea
+                    id="message"
+                    className={`${styles.input} ${styles.textarea} ${contactErrors.message ? styles.inputError : ''}`}
                     placeholder="Tell us how we can help. Feel free to share as much or as little as you're comfortable with..."
                     rows={5}
-                    {...register('message', { required: 'Message is required', minLength: { value: 20, message: 'Please write at least 20 characters' } })} />
-                  {errors.message && <span className={styles.fieldErr} role="alert">{errors.message.message}</span>}
+                    {...registerContact('message', {
+                      required: 'Message is required',
+                      minLength: { value: 20, message: 'Please write at least 20 characters' },
+                    })}
+                  />
+                  {contactErrors.message && (
+                    <span className={styles.fieldErr} role="alert">{contactErrors.message.message}</span>
+                  )}
                 </div>
 
-                <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
-                  {status === 'loading'
-                    ? <span className={styles.spinner} aria-label="Sending…" />
-                    : 'Send Message →'}
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={contactStatus === 'loading'}
+                >
+                  {contactStatus === 'loading' ? (
+                    <span className={styles.spinner} aria-label="Sending…" />
+                  ) : (
+                    'Send Message →'
+                  )}
                 </button>
+
                 <p className={styles.formNote}>
-                  🔒 Your privacy is important to us. All communications are confidential and HIPAA-compliant.
+                  🔒 All communications are completely confidential.
                 </p>
               </form>
             )}
@@ -195,7 +303,7 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* ── FAQ ── */}
       <section className={styles.faq} aria-labelledby="faq-heading">
         <div className="container">
           <div className={`${styles.sectionHead} reveal`}>
@@ -206,21 +314,192 @@ export default function Contact() {
           </div>
           <ul className={styles.faqList} role="list">
             {FAQS.map((faq, i) => (
-              <li key={i} className={`${styles.faqItem} reveal`} style={{ transitionDelay: `${i * 0.06}s` }}>
+              <li
+                key={i}
+                className={`${styles.faqItem} reveal`}
+                style={{ transitionDelay: `${i * 0.06}s` }}
+              >
                 <button
                   className={`${styles.faqQ} ${openFaq === i ? styles.faqOpen : ''}`}
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   aria-expanded={openFaq === i}
                 >
                   <span>{faq.q}</span>
-                  <span className={styles.faqIcon} aria-hidden="true">{openFaq === i ? '−' : '+'}</span>
+                  <span className={styles.faqIcon} aria-hidden="true">
+                    {openFaq === i ? '−' : '+'}
+                  </span>
                 </button>
-                <div className={`${styles.faqA} ${openFaq === i ? styles.faqAOpen : ''}`} aria-hidden={openFaq !== i}>
+                <div
+                  className={`${styles.faqA} ${openFaq === i ? styles.faqAOpen : ''}`}
+                  aria-hidden={openFaq !== i}
+                >
                   <p>{faq.a}</p>
                 </div>
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ── PATIENT FEEDBACK ── */}
+      <section className={styles.feedbackSection} aria-labelledby="feedback-heading">
+        <div className="container">
+          <div className={`${styles.sectionHead} reveal`}>
+            <span className="eyebrow">Share Your Experience</span>
+            <h2 id="feedback-heading" className={styles.sectionTitle}>
+              Patient <em>feedback</em>
+            </h2>
+            <p className={styles.sectionSub}>
+              Had a session with us? We'd love to hear how it went. Your feedback helps us improve and support others.
+            </p>
+          </div>
+
+          <div className={`${styles.feedbackWrap} reveal`}>
+            {feedbackStatus === 'success' ? (
+              <div className={styles.successState} role="alert" aria-live="polite">
+                <div className={styles.successIcon} aria-hidden="true">✦</div>
+                <h3>Thank You!</h3>
+                <p>
+                  We really appreciate you taking the time to share your experience. Your feedback means the world to us.
+                </p>
+                <button className={styles.resetBtn} onClick={() => setFeedbackStatus('idle')}>
+                  Submit Another Response
+                </button>
+              </div>
+            ) : (
+              <form
+                className={styles.form}
+                onSubmit={handleFeedback(onFeedbackSubmit)}
+                noValidate
+                aria-label="Patient feedback form"
+              >
+                {feedbackStatus === 'error' && (
+                  <div className={styles.errorBanner} role="alert">
+                    Something went wrong. Please try again.
+                  </div>
+                )}
+
+                <div className={styles.formRow}>
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="patientName">Your Name *</label>
+                    <input
+                      id="patientName"
+                      className={`${styles.input} ${feedbackErrors.patientName ? styles.inputError : ''}`}
+                      type="text"
+                      autoComplete="name"
+                      {...registerFeedback('patientName', { required: 'Name is required' })}
+                    />
+                    {feedbackErrors.patientName && (
+                      <span className={styles.fieldErr} role="alert">{feedbackErrors.patientName.message}</span>
+                    )}
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="fbEmail">
+                      Email <span style={{ fontWeight: 400, opacity: 0.5 }}>(Optional)</span>
+                    </label>
+                    <input
+                      id="fbEmail"
+                      className={styles.input}
+                      type="email"
+                      autoComplete="email"
+                      {...registerFeedback('email')}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="fbService">Service You Received *</label>
+                  <select
+                    id="fbService"
+                    className={`${styles.input} ${feedbackErrors.sessionType ? styles.inputError : ''}`}
+                    {...registerFeedback('sessionType', { required: 'Please select a service' })}
+                  >
+                    <option value="">Select the service</option>
+                    {SESSION_OPTIONS.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                  {feedbackErrors.sessionType && (
+                    <span className={styles.fieldErr} role="alert">{feedbackErrors.sessionType.message}</span>
+                  )}
+                </div>
+
+                {/* Star rating */}
+                <div className={styles.field}>
+                  <label className={styles.label}>Overall Rating *</label>
+                  <div className={styles.starRow} role="group" aria-label="Rate your experience">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        className={`${styles.star} ${star <= (hoveredStar || rating) ? styles.starFilled : ''}`}
+                        onClick={() => setRating(star)}
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        aria-label={`${star} star${star > 1 ? 's' : ''}`}
+                        aria-pressed={rating === star}
+                      >
+                        ★
+                      </button>
+                    ))}
+                    <span className={styles.ratingLabel}>
+                      {['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'][hoveredStar || rating]}
+                    </span>
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="fbFeedback">Your Feedback *</label>
+                  <textarea
+                    id="fbFeedback"
+                    className={`${styles.input} ${styles.textarea} ${feedbackErrors.feedback ? styles.inputError : ''}`}
+                    placeholder="Tell us about your experience — what helped, what could be better, or anything you'd like to share..."
+                    rows={5}
+                    {...registerFeedback('feedback', {
+                      required: 'Please share your feedback',
+                      minLength: { value: 20, message: 'Please write at least 20 characters' },
+                    })}
+                  />
+                  {feedbackErrors.feedback && (
+                    <span className={styles.fieldErr} role="alert">{feedbackErrors.feedback.message}</span>
+                  )}
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Would you recommend Asmira Wellness to others?</label>
+                  <div className={styles.radioRow}>
+                    {[['yes', 'Yes, definitely!'], ['maybe', 'Maybe'], ['no', 'Not at this time']].map(([val, lbl]) => (
+                      <label key={val} className={styles.radioLabel}>
+                        <input
+                          type="radio"
+                          value={val}
+                          defaultChecked={val === 'yes'}
+                          {...registerFeedback('wouldReturn')}
+                        />
+                        {lbl}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={feedbackStatus === 'loading'}
+                >
+                  {feedbackStatus === 'loading' ? (
+                    <span className={styles.spinner} aria-label="Submitting…" />
+                  ) : (
+                    'Submit Feedback →'
+                  )}
+                </button>
+
+                <p className={styles.formNote}>
+                  Your feedback is confidential and helps us serve our clients better. Thank you.
+                </p>
+              </form>
+            )}
+          </div>
         </div>
       </section>
     </>

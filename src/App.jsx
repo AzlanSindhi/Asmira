@@ -1,21 +1,19 @@
+// src/App.jsx
 import { Routes, Route } from 'react-router-dom';
+import Navbar       from './components/Navbar';
+import Footer       from './components/Footer';
+import ScrollToTop  from './components/ScrollToTop';
+import Home         from './pages/Home';
+import About        from './pages/About';
+import Services     from './pages/Services';
+import BookSession  from './pages/BookSession';
+import Contact      from './pages/Contact';
+import AdminDashboard from './pages/AdminDashboard';
 
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
-
-import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import BookSession from './pages/BookSession';
-import Contact from './pages/Contact';
-import AdminDashboard from './pages/Admindashboard';
-
-// Layout for normal pages
-function MainLayout({ children }) {
+// Admin route is excluded from the shared Navbar/Footer layout
+function PublicLayout({ children }) {
   return (
     <>
-      <ScrollToTop />
       <Navbar />
       <main id="main-content">{children}</main>
       <Footer />
@@ -23,65 +21,21 @@ function MainLayout({ children }) {
   );
 }
 
-// Layout for admin (no header/footer)
-function AdminLayout({ children }) {
-  return <main id="main-content">{children}</main>;
-}
-
 export default function App() {
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route
-        path="/"
-        element={
-          <MainLayout>
-            <Home />
-          </MainLayout>
-        }
-      />
-      <Route
-        path="/about"
-        element={
-          <MainLayout>
-            <About />
-          </MainLayout>
-        }
-      />
-      <Route
-        path="/services"
-        element={
-          <MainLayout>
-            <Services />
-          </MainLayout>
-        }
-      />
-      <Route
-        path="/book"
-        element={
-          <MainLayout>
-            <BookSession />
-          </MainLayout>
-        }
-      />
-      <Route
-        path="/contact"
-        element={
-          <MainLayout>
-            <Contact />
-          </MainLayout>
-        }
-      />
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* Admin — no navbar/footer */}
+        <Route path="/admin" element={<AdminDashboard />} />
 
-      {/* Admin Route (NO Navbar/Footer) */}
-      <Route
-        path="/admin"
-        element={
-          <AdminLayout>
-            <AdminDashboard />
-          </AdminLayout>
-        }
-      />
-    </Routes>
+        {/* Public pages */}
+        <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
+        <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+        <Route path="/services" element={<PublicLayout><Services /></PublicLayout>} />
+        <Route path="/book" element={<PublicLayout><BookSession /></PublicLayout>} />
+        <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+      </Routes>
+    </>
   );
 }
