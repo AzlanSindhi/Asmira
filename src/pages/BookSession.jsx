@@ -3,17 +3,77 @@ import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { createBooking } from '../firebase/services';
 import styles from './BookSession.module.css';
-
 const SESSION_TYPES = [
-  { cat: 'Psychology',    value: 'Individual Therapy',          label: 'Individual Therapy',          price: 'Enquire', duration: '50 min' },
-  { cat: 'Psychology',    value: 'Couples Counseling',          label: 'Couples Counseling',           price: 'Enquire', duration: '75 min' },
-  { cat: 'Psychology',    value: 'Career Counseling',           label: 'Career Counseling',            price: 'Enquire', duration: '60 min' },
-  { cat: 'Psychology',    value: 'Child & Adolescent Therapy',  label: 'Child & Adolescent Therapy',   price: 'Enquire', duration: '50 min' },
-  { cat: 'Counselling',   value: 'Parenting Guidance',          label: 'Parenting Guidance',           price: 'Enquire', duration: '60 min' },
-  { cat: 'Counselling',   value: 'Emotional Wellness Session',  label: 'Emotional Wellness Session',   price: 'Enquire', duration: '50 min' },
-  { cat: 'Online',        value: 'Online Counselling',          label: 'Online Counselling',           price: 'Enquire', duration: '50 min' },
-  { cat: 'Workshop',      value: 'Workshop / Group Session',    label: 'Workshop / Group Session',     price: 'Enquire', duration: 'Custom' },
-  { cat: 'Workshop',      value: 'Not sure — need guidance',    label: 'Not sure — need guidance',     price: 'Free',    duration: '15 min' },
+  {
+    cat: 'Psychology',
+    value: 'Individual Therapy',
+    label: 'Individual Therapy',
+    price: '₹900',
+    duration: '50 min'
+  },
+  {
+    cat: 'Psychology',
+    value: 'Couples Counseling',
+    label: 'Couples Counseling',
+    price: '₹1100',
+    duration: '60 min'
+  },
+  {
+    cat: 'Psychology',
+    value: 'Family Therapy',
+    label: 'Family Therapy',
+    price: '₹1800',
+    duration: '90 min'
+  },
+  {
+    cat: 'Psychology',
+    value: 'Career Counseling',
+    label: 'Career Counseling',
+    price: '₹1100',
+    duration: '60 min'
+  },
+  {
+    cat: 'Psychology',
+    value: 'Child & Adolescent Therapy',
+    label: 'Child & Adolescent Therapy',
+    price: '₹900',
+    duration: '50 min'
+  },
+  {
+    cat: 'Chiropractic',
+    value: 'Migraine Relief',
+    label: 'Migraine Relief',
+    price: '₹1500',
+    duration: '45 min'
+  },
+  {
+    cat: 'Chiropractic',
+    value: 'Movement Screen',
+    label: 'Movement Screen',
+    price: '₹1000',
+    duration: '60 min'
+  },
+  {
+    cat: 'Chiropractic',
+    value: 'Spinal Adjustment',
+    label: 'Spinal Adjustment',
+    price: '₹1000',
+    duration: '30 min'
+  },
+  {
+    cat: 'Chiropractic',
+    value: 'Posture Correction',
+    label: 'Posture Correction',
+    price: '₹1000',
+    duration: '45 min'
+  },
+  {
+    cat: 'General',
+    value: 'Not sure — need guidance',
+    label: 'Not sure — need guidance',
+    price: 'Free',
+    duration: '15 min'
+  },
 ];
 
 const CAT_COLORS = {
@@ -185,7 +245,7 @@ export default function BookSession() {
                 {status === 'error' && (
                   <div className={styles.errorBanner} role="alert">
                     Something went wrong. Please try again or contact us at{' '}
-                    <a href="tel:+919512231430">+91 95122 31430</a>.
+                    <a href="tel:+91 95122 31430">+91 95122 31430</a>.
                   </div>
                 )}
 

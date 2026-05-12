@@ -6,7 +6,7 @@ import styles from './Contact.module.css';
 
 const CONTACT_INFO = [
   { icon: '📞', label: 'Phone',   value: '+91 95122 31430',
-    href: 'tel:+919512231430' },
+    href: 'tel:+91 95122 31430' },
   { icon: '✉',  label: 'Email',   value: 'asmirawellness@gmail.com',
     href: 'mailto:asmirawellness@gmail.com' },
   { icon: '📍', label: 'Address', value: 'Asmira Wellness, 1st Floor, Shop No:118, M Square Mall, Tithal Road, Valsad – 396001',
@@ -147,8 +147,8 @@ export default function Contact() {
               <div>
                 <strong>Mental Health Crisis?</strong>
                 <p>
-                  Call <a href="tel:14416">iCall: 9152987821</a> or{' '}
-                  <a href="tel:18602662345">Vandrevala: 1860-2662-345</a> — free, confidential support.
+                  Call <a href="tel:14416">14416</a> or{' '}
+                  <a href="tel:+91 95122 31430">+91 95122 31430</a> — free, confidential support.
                 </p>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function Contact() {
                   <div className={styles.errorBanner} role="alert">
                     Something went wrong. Please email us directly at{' '}
                     <a href="mailto:asmirawellness@gmail.com">asmirawellness@gmail.com</a> or call{' '}
-                    <a href="tel:+919512231430">+91 95122 31430</a>.
+                    <a href="tel:+91 95122 31430">+91 95122 31430</a>.
                   </div>
                 )}
 

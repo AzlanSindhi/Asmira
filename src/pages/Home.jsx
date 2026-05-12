@@ -12,14 +12,14 @@ const SERVICES = [
     color: '#10375C',
     link: '/services',
   },
-  {
-    icon: '🤸',
-    label: 'Physiotherapy',
-    title: 'Physiotherapy & Rehab',
-    desc: 'Science-backed movement therapy to restore strength, mobility, and function after injury, surgery, or chronic pain.',
-    color: '#EB8317',
-    link: '/services',
-  },
+  // {
+  //   icon: '🤸',
+  //   label: 'Physiotherapy',
+  //   title: 'Physiotherapy & Rehab',
+  //   desc: 'Science-backed movement therapy to restore strength, mobility, and function after injury, surgery, or chronic pain.',
+  //   color: '#EB8317',
+  //   link: '/services',
+  // },
   {
     icon: '🦴',
     label: 'Chiropractic',
@@ -142,7 +142,7 @@ export default function Home() {
                 <div className={styles.cardSpecialties}>
                   {[
                     { icon: '🧠', label: 'Psychology', bg: 'rgba(16,55,92,0.08)' },
-                    { icon: '🤸', label: 'Physiotherapy', bg: 'rgba(235,131,23,0.1)' },
+                    // { icon: '🤸', label: 'Physiotherapy', bg: 'rgba(235,131,23,0.1)' },
                     { icon: '🦴', label: 'Chiropractic', bg: 'rgba(243,198,35,0.15)' },
                   ].map(s => (
                     <div key={s.label} className={styles.specialty} style={{ background: s.bg }}>
@@ -324,7 +324,7 @@ export default function Home() {
           <div className={`${styles.ctaBtns} reveal`} style={{ transitionDelay: '0.15s' }}>
             <Link to="/book" className={styles.ctaPrimary}>Book Appointment</Link>
             <Link to="/contact" className={styles.ctaSecondary}>Ask a Question</Link>
-            <a href="tel:+911234567890" className={styles.ctaPhone}>📞 +91 95122 31430</a>
+            <a href="tel:+91 95122 31430" className={styles.ctaPhone}>📞 +91 95122 31430</a>
           </div>
         </div>
       </section>

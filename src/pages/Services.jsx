@@ -2,28 +2,95 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import styles from './Services.module.css';
+const CATEGORIES = ['All', 'Psychology', 'Chiropractic'];
 
-const CATEGORIES = ['All', 'Psychology', 'Physiotherapy', 'Chiropractic'];
 const SERVICES = [
-  { id: 1, cat: 'Psychology', icon: '🧠', title: 'Individual Therapy', desc: 'Confidential one-on-one sessions addressing anxiety, depression, trauma, stress, grief, and more.', duration: '50 min', price: 'From ₹9,500' },
-  { id: 2, cat: 'Psychology', icon: '💑', title: 'Couples Counseling', desc: 'Guided therapy for couples navigating conflict, communication breakdowns, infidelity, or life transitions.', duration: '75 min', price: 'From ₹13,000' },
-  { id: 3, cat: 'Psychology', icon: '👨‍👩‍👧', title: 'Family Therapy', desc: 'Structured sessions to improve family dynamics, resolve conflict, and strengthen bonds between members.', duration: '75 min', price: 'From ₹14,500' },
-  { id: 4, cat: 'Psychology', icon: '🧒', title: 'Child & Adolescent', desc: 'Age-appropriate therapy for children and teens dealing with behavioural challenges, school stress, or trauma.', duration: '50 min', price: 'From ₹10,500' },
-  { id: 5, cat: 'Psychology', icon: '🫂', title: 'Group Therapy', desc: 'Facilitated group sessions for anxiety, grief recovery, social skills, and shared lived experiences.', duration: '90 min', price: 'From ₹5,000' },
-  { id: 6, cat: 'Psychology', icon: '🎯', title: 'Career Counseling', desc: 'Personalized guidance to help you choose the right career path, switch industries, or plan higher education with clarity and confidence.', duration: '60 min', price: 'From ₹6,000' },
-  { id: 7, cat: 'Physiotherapy', icon: '🏃', title: 'Sports Injury Rehab', desc: 'Evidence-based rehabilitation for sports injuries including sprains, strains, fractures, and post-op recovery.', duration: '45 min', price: 'From ₹7,500' },
-  { id: 8, cat: 'Physiotherapy', icon: '🦵', title: 'Post-Surgical Recovery', desc: 'Structured recovery programs following knee, hip, shoulder, and spinal surgeries.', duration: '45 min', price: 'From ₹9,000' },
-  { id: 9, cat: 'Physiotherapy', icon: '😣', title: 'Chronic Pain Management', desc: 'Multidisciplinary physiotherapy programs for fibromyalgia, arthritis, chronic back and neck pain.', duration: '45 min', price: 'From ₹8,000' },
-  { id: 10, cat: 'Physiotherapy', icon: '🏋️', title: 'Strength & Conditioning', desc: 'Clinical exercise programs to rebuild strength, stability, and endurance after injury or long-term inactivity.', duration: '60 min', price: 'From ₹7,000' },
-  { id: 11, cat: 'Chiropractic', icon: '🦴', title: 'Spinal Adjustment', desc: 'Precise manual manipulation of the spine to relieve compression, restore alignment, and reduce pain.', duration: '30 min', price: 'From ₹6,500' },
-  { id: 12, cat: 'Chiropractic', icon: '🧍', title: 'Posture Correction', desc: 'Comprehensive postural analysis and treatment plans for forward head posture, scoliosis, and kyphosis.', duration: '45 min', price: 'From ₹7,500' },
-  { id: 13, cat: 'Chiropractic', icon: '😤', title: 'Headache & Migraine Relief', desc: 'Cervicogenic headache treatment through targeted spinal manipulation and soft tissue therapy.', duration: '30 min', price: 'From ₹6,500' },
-  { id: 14, cat: 'Chiropractic', icon: '🤸', title: 'Functional Movement Screen', desc: 'Full-body movement assessment to identify imbalances, compensation patterns, and injury risk factors.', duration: '60 min', price: 'From ₹9,000' },
+  {
+    id: 1,
+    cat: 'Psychology',
+    icon: '🧠',
+    title: 'Individual Therapy',
+    desc: 'Confidential one-on-one sessions addressing anxiety, depression, trauma, stress, grief, and emotional wellbeing.',
+    duration: '50 min',
+    price: '₹900'
+  },
+  {
+    id: 2,
+    cat: 'Psychology',
+    icon: '💑',
+    title: 'Couples Counseling',
+    desc: 'Guided therapy sessions for couples navigating communication issues, conflict, trust concerns, and relationship challenges.',
+    duration: '60 min',
+    price: '₹1100'
+  },
+  {
+    id: 3,
+    cat: 'Psychology',
+    icon: '👨‍👩‍👧',
+    title: 'Family Therapy',
+    desc: 'Structured family sessions focused on improving relationships, resolving conflicts, and strengthening emotional connections.',
+    duration: '90 min',
+    price: '₹1800'
+  },
+  {
+    id: 4,
+    cat: 'Psychology',
+    icon: '🧒',
+    title: 'Child & Adolescent Therapy',
+    desc: 'Supportive therapy for children and teenagers dealing with behavioural issues, stress, emotional challenges, and school-related concerns.',
+    duration: '50 min',
+    price: '₹900'
+  },
+  {
+    id: 5,
+    cat: 'Psychology',
+    icon: '🎯',
+    title: 'Career Counseling',
+    desc: 'Personalized guidance to help students and professionals make informed academic and career decisions with confidence.',
+    duration: '60 min',
+    price: '₹1100'
+  },
+  {
+    id: 6,
+    cat: 'Chiropractic',
+    icon: '😣',
+    title: 'Migraine Relief',
+    desc: 'Targeted chiropractic care and manual therapy focused on reducing migraine frequency, tension, and headache-related discomfort.',
+    duration: '45 min',
+    price: '₹1500'
+  },
+  {
+    id: 7,
+    cat: 'Chiropractic',
+    icon: '🤸',
+    title: 'Movement Screen',
+    desc: 'Comprehensive movement assessment to identify mobility restrictions, muscular imbalances, and injury risks.',
+    duration: '60 min',
+    price: '₹1000'
+  },
+  {
+    id: 8,
+    cat: 'Chiropractic',
+    icon: '🦴',
+    title: 'Spinal Adjustment',
+    desc: 'Manual spinal adjustments designed to improve alignment, mobility, posture, and overall musculoskeletal function.',
+    duration: '30 min',
+    price: '₹1000'
+  },
+  {
+    id: 9,
+    cat: 'Chiropractic',
+    icon: '🧍',
+    title: 'Posture Correction',
+    desc: 'Postural assessment and corrective therapy to improve alignment, reduce strain, and support long-term spinal health.',
+    duration: '45 min',
+    price: '₹1000'
+  },
 ];
 
 const CAT_COLORS = {
   Psychology:    { bg: 'rgba(16,55,92,0.07)',   accent: '#10375C' },
-  Physiotherapy: { bg: 'rgba(235,131,23,0.08)', accent: '#EB8317' },
+  // Physiotherapy: { bg: 'rgba(235,131,23,0.08)', accent: '#EB8317' },
   Chiropractic:  { bg: 'rgba(243,198,35,0.1)',  accent: '#c9a000' },
 };
 
@@ -73,7 +140,7 @@ export default function Services() {
           <ul className={styles.overviewGrid} role="list">
             {[
               { icon: '🧠', title: 'Psychology', count: 6, desc: 'Counseling, therapy, EMDR, trauma treatment & group programs.' },
-              { icon: '🤸', title: 'Physiotherapy', count: 4, desc: 'Sports rehab, chronic pain, post-surgical & conditioning programs.' },
+              // { icon: '🤸', title: 'Physiotherapy', count: 4, desc: 'Sports rehab, chronic pain, post-surgical & conditioning programs.' },
               { icon: '🦴', title: 'Chiropractic', count: 4, desc: 'Spinal adjustment, posture, migraine & functional movement.' },
             ].map(d => (
               <li key={d.title} className={`${styles.overviewCard} reveal`}>

@@ -140,7 +140,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team */}
+      {/* Team 
       <section className={styles.team} aria-labelledby="team-heading">
         <div className="container">
           <div className={`${styles.sectionHead} reveal`}>
@@ -170,8 +170,9 @@ export default function About() {
           </ul>
         </div>
       </section>
+      */}
 
-      {/* Accreditations */}
+      {/* Accreditations 
       <section className={styles.accreditations} aria-labelledby="accred-heading">
         <div className="container">
           <div className={`${styles.sectionHead} reveal`}>
@@ -196,6 +197,7 @@ export default function About() {
           </ul>
         </div>
       </section>
+      */}
 
       {/* CTA */}
       <section className={styles.cta} aria-label="Book appointment">

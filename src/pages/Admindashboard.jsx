@@ -674,14 +674,27 @@ function LoginScreen({ onLogin }) {
   const [pw,setPw]     = useState('');
   const [err,setErr]   = useState('');
   const [show,setShow] = useState(false);
+const submit = e => {
+  e.preventDefault();
 
-  const submit = e => {
-    e.preventDefault();
-    const c = getCreds();
-    if(id===c.id&&pw===c.password){ createSession(); onLogin(); }
-    else setErr('Incorrect Admin ID or password. Please try again.');
-  };
+  const c = getCreds();
 
+  console.log({
+    enteredId: id,
+    enteredPw: pw,
+    stored: c
+  });
+
+  if (
+    id.trim() === c.id.trim() &&
+    pw.trim() === c.password.trim()
+  ) {
+    createSession();
+    onLogin();
+  } else {
+    setErr('Incorrect Admin ID or password. Please try again.');
+  }
+};
   return (
     <div style={S.lWrap}>
       <div style={S.lCard}>
